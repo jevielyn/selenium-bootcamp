@@ -48,12 +48,12 @@ describe('npmjs.com package search', () => {
 
       // 1.1 Validate that the title matches expected homepage title "Cambridge"
       const homepageTitle = await driver.getTitle()
-      expect(homepageTitle).toEqual('Cambridge')
+      expect(homepageTitle).toEqual('Cambridge Core - Journals & Books Online | Cambridge University Press')
 
       // 2.0 click each social media below the page (facebook, twitter, linkedin, youtube and instagram)
-      await driver
-        .wait(until.elementLocated(By.xpath(`//input[@name='q']`)))
-        .sendKeys('selenium bootcamp', Key.ENTER)
+      // await driver
+      //   .wait(until.elementLocated(By.xpath(`//div[@class='social-container']//ul[@class='social']`)))
+      //   .sendKeys('selenium bootcamp', Key.ENTER)
 
       // Wait until browser loads completely
       await driver.sleep(2000)
@@ -62,6 +62,18 @@ describe('npmjs.com package search', () => {
           return state === 'complete'
         })
       }, 120000)
+
+      const socialList= await driver.findElement(By.xpath(`//div[@class='social-container']//ul[@class='social']//li/a[@class='icon fb']`))
+      socialList.click()
+
+      await driver.sleep(2000)
+      await driver.wait(() => {
+        return driver.executeScript('return document.readyState').then(state => {
+          return state === 'complete'
+        })
+      }, 120000)
+
+      driver.executeScript('window.open("newURL");');
 
       // 2.1 Validate that the title matches expected search page title 'selenium bootcamp - Google Search'
       const searchPageTitle = await driver.getTitle()
